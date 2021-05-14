@@ -1,14 +1,17 @@
 import React from 'react'
-import { View, Text, StyleSheet, Button } from 'react-native'
+import { View, Text, StyleSheet, Button, Image } from 'react-native'
 import Colors from '../constants/colors'
+import BodyText from '../components/BodyText'
+import TitleText from '../components/TitleText'
 
 const GameOverScreen = props => {
 
     return(
         <View style={styles.screen}>
-            <Text>Game Over!</Text>
-            <Text>There Were {props.totalRounds} Rounds!</Text>
-            <Text>The Number Was {props.userNumber}</Text>
+            <TitleText>Game Over!</TitleText>
+            <Image source={require('../assets/khaled.jpg')} />
+            <BodyText>There Were {props.totalRounds} Rounds</BodyText>
+            <BodyText>Your Number Was {props.userNumber}</BodyText>
             <Button title='New Game' onPress={props.handleNewGame} color={Colors.secondary} />
         </View>
     )
