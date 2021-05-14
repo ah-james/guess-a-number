@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react'
+import React, {useState, useRef, useEffect} from 'react'
 import {View, Text, StyleSheet, Button, Alert } from 'react-native'
 import NumberContainer from '../components/NumberContainer'
 import Card from '../components/Card'
@@ -17,9 +17,19 @@ generateRandomNumber = (min, max, exclude) => {
 
 const GameScreen = props => {
     const [currentGuess, setCurrentGuess] = useState(generateRandomNumber(1, 99, props.userNumber))
+    const [rounds, setRounds] = useState(0)
 
     const currentMax = useRef(99)
     const currentMin = useRef(1)
+
+    const { userNumber, handleGameOver } = props
+
+    // useEffect hook runs side-effects (calculations that don't target output value) separately from rendering
+    useEffect(() => {
+        if (currentGuess === userNumber) {
+            handleGameOver(rounds)
+        }
+    }, [currentGuess, userNumber, handleGameOver])
 
     const handleNextGuess = direction => {
         if ((direction === 'lower' && currentGuess < props.userNumber) || (direction === 'higher' && currentGuess > props.userNumber)) {
@@ -33,6 +43,7 @@ const GameScreen = props => {
         }
         const nextGuess = generateRandomNumber(currentMin.current, currentMax.current, currentGuess)
         setCurrentGuess(nextGuess)
+        setRounds(currentRounds => currentRounds  + 1)
     }
 
     return(
