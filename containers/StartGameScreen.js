@@ -6,29 +6,37 @@ import Input from '../components/Input'
 import NumberContainer from '../components/NumberContainer'
 
 const StartGameScreen = props => {
-
+    // set enteredValue as empty, confirmed to false, selectedNumber to empty
     const [enteredValue, setEnteredValue] = useState('')
     const [confirmed, setConfirmed] = useState(false)
     const [selectedNumber, setSelectedNumber] = useState()
 
     const handleNumberInput = inputText => {
+        // if user input includes text outside of numbers, delete it with replace method
         setEnteredValue(inputText.replace(/[^0-9]/g, ''))
     }
 
     const handleResetInput = () => {
+        // when reset input is called reset enteredValue and comfirmed to original states, empty and false
         setEnteredValue('')
         setConfirmed(false)
     }
 
     const handleConfirmInput = () => {
+        // parseInt to change enteredValue string to number
         const chosenNumber = parseInt(enteredValue)
+        // if number is NaN, < 0, or < 99
         if (isNaN(chosenNumber) || chosenNumber <= 0 || chosenNumber > 99) {
+            // give an alert to choose a different number, call handleResetInput
             Alert.alert('Invalid Number', 'Number must be between 1 and 99', [{text: 'Okay', style: 'cancel', onPress: handleResetInput}])
             return
         }
+        // set confirmed to true to render user's selected number on screen
         setConfirmed(true)
+        // reset enteredValue to remove text from textfield
         setEnteredValue('')
         setSelectedNumber(chosenNumber)
+        // dismiss keyboard from screen
         Keyboard.dismiss()
     }
 

@@ -3,6 +3,7 @@ import { View, StyleSheet} from 'react-native'
 
 const Card = props => {
     return(
+        // spread styles acquired from props, if any are same as styles.card those get replaced
         <View style={{...styles.card, ...props.style}}>{props.children}</View>
     )
 }
