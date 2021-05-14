@@ -3,6 +3,7 @@ import {View, Text, StyleSheet, Button, Alert } from 'react-native'
 import NumberContainer from '../components/NumberContainer'
 import Card from '../components/Card'
 import Colors from '../constants/colors'
+import TitleText from '../components/TitleText'
 
 generateRandomNumber = (min, max, exclude) => {
     // min & max number use ceil and floor to stop debauchery
@@ -62,7 +63,7 @@ const GameScreen = props => {
 
     return(
         <View style={styles.screen}>
-            <Text>Computer's Guess:</Text>
+            <TitleText>Computer's Guess:</TitleText>
             <NumberContainer>{currentGuess}</NumberContainer>
             <Card style={styles.buttonContainer} >
                 <Button title="Lower" onPress={handleNextGuess.bind(this, 'lower')} color={Colors.secondary} />

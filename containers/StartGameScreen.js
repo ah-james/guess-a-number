@@ -4,6 +4,8 @@ import Card from '../components/Card'
 import Colors from '../constants/colors'
 import Input from '../components/Input'
 import NumberContainer from '../components/NumberContainer'
+import BodyText from '../components/BodyText'
+import TitleText from '../components/TitleText'
 
 const StartGameScreen = props => {
     // set enteredValue as empty, confirmed to false, selectedNumber to empty
@@ -45,7 +47,7 @@ const StartGameScreen = props => {
     if (confirmed) {
         confirmedOutput = 
             <Card style={styles.outputContainer}>
-                <Text>Your Number Is:</Text>
+                <TitleText>Your Number Is:</TitleText>
                 <NumberContainer>{selectedNumber}</NumberContainer>
                 <Button title='Start Game' onPress={() => props.handleStartGame(selectedNumber)} color={Colors.primary}/>
             </Card>
@@ -54,9 +56,9 @@ const StartGameScreen = props => {
     return(
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()} >
             <View style={styles.startScreen}>
-                <Text style={styles.title}>Start a New Game</Text>
+                <TitleText style={styles.title}>Start a New Game</TitleText>
                 <Card style={styles.inputContainer}>
-                    <Text>Select a Number</Text>
+                    <BodyText>Select a Number</BodyText>
                     <Input style={styles.input} blurOnSubmit keyboardType="number-pad" maxLength={2} onChangeText={handleNumberInput} value={enteredValue} />
                     <View style={styles.buttonContainer}>
                         <View style={styles.button}><Button title="Reset" onPress={handleResetInput} color={Colors.secondary} /></View>
