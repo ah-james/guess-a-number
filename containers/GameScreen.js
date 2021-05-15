@@ -1,10 +1,10 @@
-import React, {useState, useRef, useEffect} from 'react'
-import {View, Text, StyleSheet, Button, Alert } from 'react-native'
+import React, { useState, useRef, useEffect } from 'react'
+import { View, StyleSheet, Alert, ScrollView, Text } from 'react-native'
 import NumberContainer from '../components/NumberContainer'
 import Card from '../components/Card'
-import Colors from '../constants/colors'
 import TitleText from '../components/TitleText'
 import MainButton from '../components/MainButton'
+import { Ionicons } from '@expo/vector-icons'
 
 generateRandomNumber = (min, max, exclude) => {
     // min & max number use ceil and floor to stop debauchery
@@ -23,8 +23,10 @@ generateRandomNumber = (min, max, exclude) => {
 }
 
 const GameScreen = props => {
-    const [currentGuess, setCurrentGuess] = useState(generateRandomNumber(1, 99, props.userNumber))
-    const [rounds, setRounds] = useState(0)
+    const firstGuess = generateRandomNumber(1, 99, props.userNumber)
+
+    const [currentGuess, setCurrentGuess] = useState(firstGuess)
+    const [pastGuesses, setPastGuesses] = useState([firstGuess])
 
     // create variables with useRef hook to modify outside of dataflow, default to highest and lowest possible guesses
     const currentMax = useRef(99)
@@ -36,7 +38,7 @@ const GameScreen = props => {
     // useEffect hook runs side-effects (calculations that don't target output value) separately from rendering
     useEffect(() => {
         if (currentGuess === userNumber) {
-            handleGameOver(rounds)
+            handleGameOver(pastGuesses.length)
         }
     }, [currentGuess, userNumber, handleGameOver])
 
@@ -52,14 +54,16 @@ const GameScreen = props => {
             currentMax.current = currentGuess
         } else {
             // if direction is higher currentMin variable is set equal to currentGuess in state
-            currentMin.current = currentGuess
+            currentMin.current = currentGuess + 1
         }
         // generates new random number with currentMin, max, and guess
         const nextGuess = generateRandomNumber(currentMin.current, currentMax.current, currentGuess)
         // sets currentGuess state to nextGuess
         setCurrentGuess(nextGuess)
         // adds 1 to rounds
-        setRounds(currentRounds => currentRounds + 1)
+        // setRounds(currentRounds => currentRounds + 1)
+        // set past guesses state by pushing most recent guess into array of past guesses, can't use currentGuess because React wouldn't have updated state and re-built component
+        setPastGuesses(pastGuesses => [nextGuess, ...pastGuesses])
     }
 
     return(
@@ -67,9 +71,15 @@ const GameScreen = props => {
             <TitleText>Computer's Guess:</TitleText>
             <NumberContainer>{currentGuess}</NumberContainer>
             <Card style={styles.buttonContainer} >
-                <MainButton onPress={handleNextGuess.bind(this, 'lower')}>Lower</MainButton>
-                <MainButton onPress={handleNextGuess.bind(this, 'higher')}>Higher</MainButton>
+                <MainButton onPress={handleNextGuess.bind(this, 'lower')}><Ionicons name="md-remove" size={25} color="white" /></MainButton>
+                <MainButton onPress={handleNextGuess.bind(this, 'higher')}><Ionicons name="md-add" size={25} color="white" /></MainButton>
             </Card>
+            <ScrollView>
+                {pastGuesses.map(guess => 
+                <View key={guess}>
+                    <Text>{guess}</Text>
+                </View>)}
+            </ScrollView>
         </View>
     )
 }
