@@ -82,8 +82,8 @@ const GameScreen = props => {
                 <MainButton onPress={handleNextGuess.bind(this, 'lower')}><Ionicons name="md-remove" size={25} color="white" /></MainButton>
                 <MainButton onPress={handleNextGuess.bind(this, 'higher')}><Ionicons name="md-add" size={25} color="white" /></MainButton>
             </Card>
-            <View style={styles.list}>
-                <ScrollView>
+            <View style={styles.listContainer}>
+                <ScrollView contentContainerStyle={styles.list}>
                     {pastGuesses.map((guess, index) => renderGuessList(guess, pastGuesses.length - index))}
                 </ScrollView>
             </View>
@@ -114,8 +114,13 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         justifyContent: 'space-around'
     },
-    list: {
+    listContainer: {
         flex: 1,
+    },
+    list: {
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        flexGrow: 1,
     },
 })
 
