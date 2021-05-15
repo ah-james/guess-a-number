@@ -5,6 +5,7 @@ import Card from '../components/Card'
 import TitleText from '../components/TitleText'
 import MainButton from '../components/MainButton'
 import { Ionicons } from '@expo/vector-icons'
+import BodyText from '../components/BodyText'
 
 generateRandomNumber = (min, max, exclude) => {
     // min & max number use ceil and floor to stop debauchery
@@ -21,6 +22,13 @@ generateRandomNumber = (min, max, exclude) => {
         return randomNumber
     }
 }
+
+const renderGuessList = (guess, roundNumber) => (
+    <View key={guess} style={styles.listItem}>
+        <BodyText>Round {roundNumber}: </BodyText>
+        <BodyText>{guess}</BodyText>
+    </View>
+)
 
 const GameScreen = props => {
     const firstGuess = generateRandomNumber(1, 99, props.userNumber)
@@ -74,12 +82,11 @@ const GameScreen = props => {
                 <MainButton onPress={handleNextGuess.bind(this, 'lower')}><Ionicons name="md-remove" size={25} color="white" /></MainButton>
                 <MainButton onPress={handleNextGuess.bind(this, 'higher')}><Ionicons name="md-add" size={25} color="white" /></MainButton>
             </Card>
-            <ScrollView>
-                {pastGuesses.map(guess => 
-                <View key={guess}>
-                    <Text>{guess}</Text>
-                </View>)}
-            </ScrollView>
+            <View style={styles.list}>
+                <ScrollView>
+                    {pastGuesses.map((guess, index) => renderGuessList(guess, pastGuesses.length - index))}
+                </ScrollView>
+            </View>
         </View>
     )
 }
@@ -96,7 +103,20 @@ const styles = StyleSheet.create({
         marginTop: 20,
         width: 300,
         maxWidth: '80%'
-    }
+    },
+    listItem: {
+        borderColor: '#ccc',
+        borderWidth: 1,
+        padding: 15,
+        marginVertical: 10,
+        backgroundColor: 'white',
+        flexDirection: 'row',
+        borderRadius: 15,
+        justifyContent: 'space-around'
+    },
+    list: {
+        flex: 1,
+    },
 })
 
 export default GameScreen
