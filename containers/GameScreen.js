@@ -4,6 +4,7 @@ import NumberContainer from '../components/NumberContainer'
 import Card from '../components/Card'
 import Colors from '../constants/colors'
 import TitleText from '../components/TitleText'
+import MainButton from '../components/MainButton'
 
 generateRandomNumber = (min, max, exclude) => {
     // min & max number use ceil and floor to stop debauchery
@@ -66,8 +67,8 @@ const GameScreen = props => {
             <TitleText>Computer's Guess:</TitleText>
             <NumberContainer>{currentGuess}</NumberContainer>
             <Card style={styles.buttonContainer} >
-                <Button title="Lower" onPress={handleNextGuess.bind(this, 'lower')} color={Colors.secondary} />
-                <Button title="Higher" onPress={handleNextGuess.bind(this, 'higher')} color={Colors.primary} />
+                <MainButton onPress={handleNextGuess.bind(this, 'lower')}>Lower</MainButton>
+                <MainButton onPress={handleNextGuess.bind(this, 'higher')}>Higher</MainButton>
             </Card>
         </View>
     )
