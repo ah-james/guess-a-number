@@ -16,8 +16,7 @@ const GameOverScreen = props => {
                 source={{uri: 'https://blueseatblogs.com/wp-content/uploads/2018/07/consciousness-709143-400x300.jpg'}}
                 />
             </View>
-            <BodyText>There Were {props.totalRounds} Rounds</BodyText>
-            <BodyText>Your Number Was {props.userNumber}</BodyText>
+            <BodyText style={styles.resultText}>It took <Text style={styles.highlight}>{props.totalRounds}</Text> rounds to guess the number <Text style={styles.highlight}>{props.userNumber}</Text></BodyText>
             <Button title='New Game' onPress={props.handleNewGame} color={Colors.secondary} />
         </View>
     )
@@ -41,6 +40,13 @@ const styles = StyleSheet.create({
         borderColor: 'black',
         overflow: 'hidden',
         marginVertical: 30,
+    },
+    highlight: {
+        color: Colors.primary,
+    },
+    resultText: {
+        textAlign: 'center',
+        fontSize: 20,
     }
 })
 
