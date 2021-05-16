@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState, useEffect } from 'react'
 import { StyleSheet, View, Button, TouchableWithoutFeedback, Keyboard, Alert, Dimensions, ScrollView, KeyboardAvoidingView } from 'react-native'
 import Card from '../components/Card'
 import Colors from '../constants/colors'
@@ -13,6 +13,18 @@ const StartGameScreen = props => {
     const [enteredValue, setEnteredValue] = useState('')
     const [confirmed, setConfirmed] = useState(false)
     const [selectedNumber, setSelectedNumber] = useState()
+    const [buttonWidth, setButtonWidth] = useState(Dimensions.get('window').width / 4)
+
+    useEffect(() => {
+        const updateLayout = () => {
+            setButtonWidth(Dimensions.get('window').width / 4)
+        }
+
+        Dimensions.addEventListener('change', updateLayout)
+        return () => {
+            Dimensions.removeEventListener('change', updateLayout)
+        }
+    })
 
     const handleNumberInput = inputText => {
         // if user input includes text outside of numbers, delete it with replace method
@@ -64,8 +76,8 @@ const StartGameScreen = props => {
                             <BodyText>Select a Number</BodyText>
                             <Input style={styles.input} blurOnSubmit keyboardType="number-pad" maxLength={2} onChangeText={handleNumberInput} value={enteredValue} />
                             <View style={styles.buttonContainer}>
-                                <View style={styles.button}><Button title="Reset" onPress={handleResetInput} color={Colors.secondary} /></View>
-                                <View style={styles.button}><Button title="Confirm" onPress={handleConfirmInput} color={Colors.primary} /></View>
+                                <View style={{width: buttonWidth}}><Button title="Reset" onPress={handleResetInput} color={Colors.secondary} /></View>
+                                <View style={{width: buttonWidth}}><Button title="Confirm" onPress={handleConfirmInput} color={Colors.primary} /></View>
                             </View>
                         </Card>
                         {confirmedOutput}
@@ -100,11 +112,11 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingHorizontal: 15,
     },
-    button: {
-        // width: 100,
-        // instead of hardcoding, use Dimensions API from react-native to get full width of entire device ('window') and divide width for 2 buttons
-        width: Dimensions.get('window').width / 4
-    },
+    // button: {
+    //     width: 100,
+    //     // instead of hardcoding, use Dimensions API from react-native to get full width of entire device ('window') and divide width for 2 buttons
+    //     width: Dimensions.get('window').width / 4
+    // },
     input: {
         width: 50,
         textAlign: 'center',
