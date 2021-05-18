@@ -35,6 +35,8 @@ const GameScreen = props => {
 
     const [currentGuess, setCurrentGuess] = useState(firstGuess)
     const [pastGuesses, setPastGuesses] = useState([firstGuess])
+    const [currentDeviceWidth, setCurrentDeviceWidth] = useState(Dimensions.get('window').width)
+    const [currentDeviceHeight, setCurrentDeviceHeight] = useState(Dimensions.get('window').height)
 
     // create variables with useRef hook to modify outside of dataflow, default to highest and lowest possible guesses
     const currentMax = useRef(99)
@@ -49,6 +51,19 @@ const GameScreen = props => {
             handleGameOver(pastGuesses.length)
         }
     }, [currentGuess, userNumber, handleGameOver])
+
+    useEffect(() => {
+        const updateLayout = () => {
+            setCurrentDeviceHeight(Dimensions.get('window').height)
+            setCurrentDeviceWidth(Dimensions.get('window').width)
+        }
+
+        Dimensions.addEventListener('change', updateLayout)
+
+        return () => {
+            Dimensions.removeEventListener('change', updateLayout)
+        }
+    })
 
     const handleNextGuess = direction => {
         // if direction selected is lower but user number is higher or vice versa
@@ -72,6 +87,24 @@ const GameScreen = props => {
         // setRounds(currentRounds => currentRounds + 1)
         // set past guesses state by pushing most recent guess into array of past guesses, can't use currentGuess because React wouldn't have updated state and re-built component
         setPastGuesses(pastGuesses => [nextGuess, ...pastGuesses])
+    }
+
+    if (currentDeviceHeight < 500) {
+        return(
+            <View style={styles.screen}>
+                <TitleText>Computer's Guess:</TitleText>
+                <View style={styles.controls}>
+                    <MainButton onPress={handleNextGuess.bind(this, 'lower')}><Ionicons name="md-remove" size={25} color="white" /></MainButton>
+                    <NumberContainer>{currentGuess}</NumberContainer>
+                    <MainButton onPress={handleNextGuess.bind(this, 'higher')}><Ionicons name="md-add" size={25} color="white" /></MainButton>
+                </View>
+                <View style={styles.listContainer}>
+                    <ScrollView contentContainerStyle={styles.list}>
+                        {pastGuesses.map((guess, index) => renderGuessList(guess, pastGuesses.length - index))}
+                    </ScrollView>
+                </View>
+            </View>
+        )
     }
 
     return(
@@ -122,6 +155,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'flex-end',
         flexGrow: 1,
+    },
+    controls: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        width: '80%',
+        alignItems: 'center',
     },
 })
 
