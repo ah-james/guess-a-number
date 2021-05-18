@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View, Text } from 'react-native'
+import { StyleSheet, View, Platform } from 'react-native'
 import Colors from '../constants/colors'
 import TitleText from '../components/TitleText'
 
@@ -18,10 +18,11 @@ const styles = StyleSheet.create({
         height: 90,
         // move text down from top of component
         paddingTop: 40,
-        backgroundColor: Colors.primary,
+        backgroundColor: Platform.OS === 'android' ? Colors.primary : Colors.secondary,
         // center text on the page
         alignItems: 'center',
         justifyContent: 'center',
+        borderBottomColor: Platform.OS === 'ios' ? 'gray' : 'transparent'
     },
 })
 
